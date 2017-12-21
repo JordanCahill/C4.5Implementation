@@ -13,8 +13,8 @@ import java.util.Scanner;
  *  This project is built to implement the C4.5 Machine Learning Algorithm.
  * 
  *  The location of the data file used to build and analyse the model is hardcoded programmatically and must be of 
- *  type .csv. The first row of the data must have attribute titles, and the data should not have any missing values. The dependent class variables must be the column
- *  furthest to the right.
+ *  type .csv. The first row of the data must have attribute titles, and the data should not have any missing values. 
+ * The dependent class variables must be the column furthest to the right.
  *  
  *  The program begins by allowing the user to input the size of the data set to be used as a training set, as well
  *  as the number of times the model runs to get an overall average accuracy. The accuracy of each run and the overall
@@ -40,7 +40,7 @@ public class MainRunner {
         rows = allData.getRows() - 1;
         columns = allData.getColumns();
 
-        // Allow user to input training set size
+        // Allow user to input training set size; For the owls set, 2/3 = 90
         System.out.print("Please choose the size of the training data: ");
         
         // Functionality to account for user entering an invalid size
@@ -144,8 +144,8 @@ public class MainRunner {
         for (int i = 1; i < (data.length - 1); i++) { // Loop over data set
             
             if (!(data[i][numAtts].equals(data[i+1][numAtts]))) { // Check "attribute = next attribute"
-                if (uniqueElements > 2) {												//Willing to accept a single, odd element ---- can be altered
-                    i = data.length; 														//break the for loop when >1 classes recognised
+                if (uniqueElements > 2) {												
+                    i = data.length; 													
                 } else {
                     uniqueElements++;
                 }
@@ -223,41 +223,41 @@ public class MainRunner {
      * @throws IOException 
      */
     private static void outputToCSV(ArrayList<TestData> td, int i, float runAccuracy) throws IOException{
-        if (i==0){ // As the method is called within the for loop, i is used to output the first ("0th") run
-            
+                  
             // Prepare the FileWriter and output the headings
-            FileWriter out = new FileWriter("Results.csv");
-            float accuracy = runAccuracy;
-            String runAcc = String.valueOf(accuracy);
-            out.append("accuracy of run " + i + ":");
-            out.append(',');
-            out.append(runAcc + "%");
-            out.append('\n');
-            out.append("result");
-            out.append(',');
-            out.append("predicted");
-            out.append(',');
-            out.append("actual");
-            out.append('\n');
-            
-            for (TestData t : td){ // Loop through td foreach TestData
-                
-                // Get the String values for each result and add to the .csv
-                String TorF = String.valueOf(t.getResult());
-                String predictedOut = t.getPredicted();
-                String actualOut = t.getActual();
-                out.append(TorF);
-                out.append(",");
-                out.append(predictedOut);
-                out.append(",");
-                out.append(actualOut);
-                out.append("\n");
+        FileWriter out = new FileWriter("Results.csv", true);
+        float accuracy = runAccuracy;
+        String runAcc = String.valueOf(accuracy);
+        out.append("accuracy of run " + (i+1) + ":");
+        out.append(',');
+        out.append(runAcc + "%");
+        out.append('\n');
+        out.append("result");
+        out.append(',');
+        out.append("predicted");
+        out.append(',');
+        out.append("actual");
+        out.append('\n');
 
-            }
-            out.flush();
-            out.close();
+        for (TestData t : td){ // Loop through td foreach TestData
+
+            // Get the String values for each result and add to the .csv
+            String TorF = String.valueOf(t.getResult());
+            String predictedOut = t.getPredicted();
+            String actualOut = t.getActual();
+            out.append(TorF);
+            out.append(",");
+            out.append(predictedOut);
+            out.append(",");
+            out.append(actualOut);
+            out.append("\n");
+
         }
+        out.append('\n');
+        out.flush();
+        out.close();
     }
+    
     
     /**
      * Returns the accuracy of a given test run
